@@ -23,7 +23,7 @@ data class User(
     @Column(nullable = false)
     val phone: String,
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "order_id", nullable = false)
     val orders: Order,
 
