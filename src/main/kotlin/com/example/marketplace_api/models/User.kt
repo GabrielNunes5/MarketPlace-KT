@@ -11,6 +11,9 @@ data class User(
     @Column(nullable = false, unique = true)
     val username: String,
 
+    @Column(nullable = false)
+    val fullName: String,
+
     @Column(nullable = false, unique = true)
     val email: String,
 
@@ -18,7 +21,11 @@ data class User(
     val password: String,
 
     @Column(nullable = false)
-    val fullName: String,
+    val phone: String,
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    val orders: Order,
 
     )
 
