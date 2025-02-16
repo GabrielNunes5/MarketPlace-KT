@@ -11,8 +11,8 @@ data class Order(
     @JoinColumn(name = "user_id", nullable = false)
     val user: User,
 
-    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val orderItems: MutableList<OrderItem> = mutableListOf(),
+    @OneToOne
+    val orderItems: OrderItem,
 
     @Column(nullable = false)
     val totalPrice: Double,
