@@ -7,13 +7,13 @@ data class OrderItem(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
     val order: Order,
 
     @ManyToMany
     @JoinColumn(name = "product_id", nullable = false)
-    val product: Product,
+    val product: Product, // MutableList de produtos 
 
     @Column(nullable = false)
     val quantity: Int,
