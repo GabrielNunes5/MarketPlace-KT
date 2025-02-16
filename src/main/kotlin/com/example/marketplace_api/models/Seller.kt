@@ -22,5 +22,6 @@ data class Seller(
 
     @Column(nullable = false)
     val rating: Double
+    // @OneToMany Products
 )
 
