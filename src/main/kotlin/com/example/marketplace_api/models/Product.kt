@@ -17,7 +17,4 @@ data class Product(
     @Column(nullable = false)
     val price: Double,
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id", nullable = false)
-    val seller: Seller
 )
