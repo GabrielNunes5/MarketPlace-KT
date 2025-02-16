@@ -17,4 +17,7 @@ data class Product(
     @Column(nullable = false)
     val price: Double,
 
+    // ManytoMany OrderItem 
+    // ADD QTD COlumn 
+
 )
