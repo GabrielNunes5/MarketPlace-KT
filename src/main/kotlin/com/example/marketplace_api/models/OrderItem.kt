@@ -11,7 +11,7 @@ data class OrderItem(
     @JoinColumn(name = "order_id", nullable = false)
     val order: Order,
 
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "product_id", nullable = false)
     val product: Product,
 
