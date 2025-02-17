@@ -1,23 +1,26 @@
 package com.example.marketplace_api.models
 import jakarta.persistence.*
+import java.math.BigDecimal
+import java.util.*
 
 @Entity
 @Table(name = "order_items")
-data class OrderItem(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+class OrderItem(
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: UUID? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    val order: Order,
+    val OriginOrder: Order,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     val product: Product,
 
     @Column(nullable = false)
     val quantity: Int,
 
-    @Column(nullable = false)
-    val price: Double
+    @Column(nullable = false, precision = 10, scale = 2)
+    val unitPrice: BigDecimal
 )

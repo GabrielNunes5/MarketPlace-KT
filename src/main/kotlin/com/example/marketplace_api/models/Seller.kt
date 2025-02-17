@@ -1,26 +1,27 @@
 package com.example.marketplace_api.models
 
 import jakarta.persistence.*
+import org.hibernate.annotations.CreationTimestamp
+import java.time.Instant
+import java.util.*
 
 @Entity
 @Table(name = "sellers")
-data class Seller(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+class Seller(
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: UUID? = null,
 
-    @Column(nullable = false, unique = true)
-    val email: String,
+    @Column(nullable = false, length = 20, unique = true)
+    val taxId: String,
 
-    @Column(nullable = false)
-    val password: String,
+    @Column(length = 100)
+    val companyName: String?,
 
-    @Column(nullable = false)
-    val fullName: String,
+    @CreationTimestamp
+    val createdAt: Instant? = null,
 
-    @Column(nullable = false)
-    val storeName: String,
-
-    @Column(nullable = false)
-    val rating: Double
+    @OneToMany(mappedBy = "seller", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val products: MutableList<Product> = mutableListOf()
 )
 
