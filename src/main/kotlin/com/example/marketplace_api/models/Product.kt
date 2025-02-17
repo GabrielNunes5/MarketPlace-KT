@@ -1,34 +1,23 @@
 package com.example.marketplace_api.models
 
 import jakarta.persistence.*
-import org.hibernate.annotations.CreationTimestamp
-import java.math.BigDecimal
-import java.time.Instant
-import java.util.*
 
 @Entity
 @Table(name = "products")
-class Product(
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID? = null,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false)
-    val productSeller: Seller,
-
-    @Column(nullable = false, length = 100)
-    val productName: String,
-
-    @Column(columnDefinition = "TEXT")
-    val description: String?,
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    val price: BigDecimal,
+data class Product(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
 
     @Column(nullable = false)
-    var stockQuantity: Int = 0,
+    val name: String,
 
-    @CreationTimestamp
-    val createdAt: Instant? = null
+    @Column(nullable = false)
+    val description: String,
+
+    @Column(nullable = false)
+    val price: Double,
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id", nullable = false)
+    val seller: Seller
 )
