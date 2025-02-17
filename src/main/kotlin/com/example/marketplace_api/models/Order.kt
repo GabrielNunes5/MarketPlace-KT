@@ -1,22 +1,30 @@
 package com.example.marketplace_api.models
+
 import jakarta.persistence.*
+import org.hibernate.annotations.CreationTimestamp
+import java.time.Instant
+import java.util.*
 
 @Entity
 @Table(name = "orders")
-data class Order(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+class Order(
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: UUID? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val user: User,
 
+    @Column(nullable = false, length = 20)
+    var status: String = "PENDING",
+
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val orderItems: MutableList<OrderItem> = mutableListOf(),
+    val items: MutableList<OrderItem> = mutableListOf(),
 
-    @Column(nullable = false)
-    val totalPrice: Double,
+    @OneToOne(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var payment: Payment? = null,
 
-    @Column(nullable = false)
-    val status: String
+    @CreationTimestamp
+    val createdAt: Instant? = null
 )

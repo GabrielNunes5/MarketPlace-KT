@@ -8,8 +8,7 @@ import java.util.*
 
 @Entity
 @Table(name = "payments")
-data class Payment(
-
+class Payment(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID? = null,
@@ -18,20 +17,18 @@ data class Payment(
     @JoinColumn(name = "order_id", nullable = false, unique = true)
     val order: Order,
 
-    @Column
+    @Column(nullable = false, precision = 10, scale = 2)
     val amount: BigDecimal,
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     val method: String,
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 100)
-    var status: String,
+    @Column(nullable = false, length = 20)
+    var status: String = "PENDING",
 
     @Column(unique = true)
     val transactionId: String?,
 
     @CreationTimestamp
-    val createdAt: Instant? = null,
+    val createdAt: Instant? = null
 )

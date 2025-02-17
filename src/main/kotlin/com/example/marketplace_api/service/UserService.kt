@@ -1,7 +1,7 @@
 package com.example.marketplace_api.service
 
 import com.example.marketplace_api.models.User
-import com.example.marketplace_api.repository.UserRepository
+import com.example.marketplace_api.repositories.UserRepository
 import org.springframework.stereotype.Service
 import java.util.*
 

@@ -9,5 +9,4 @@ class MarketplaceApiApplicationTests {
 	@Test
 	fun contextLoads() {
 	}
-
 }
