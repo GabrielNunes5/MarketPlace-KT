@@ -37,7 +37,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	testImplementation("com.h2database:h2")
+	testImplementation("com.h2database:h2:2.2.224")
 }
 
 kotlin {
@@ -54,4 +54,12 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	testLogging {
+		events("passed", "skipped", "failed")
+		showExceptions = true
+		exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+		showCauses = true
+		showStackTraces = true
+
+	}
 }
