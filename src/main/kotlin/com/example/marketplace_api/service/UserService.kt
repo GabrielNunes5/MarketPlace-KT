@@ -18,14 +18,14 @@ class UserService(private val userRepository: UserRepository ) {
         return userRepository.findAll()
     }
 
-    fun findUserByEmail(email: String): User? {
-        return userRepository.findByEmail(email)
-    }
+    fun findUserByEmail(email: String): User =
+        userRepository.findByEmail(email)
+            ?: throw UserNotFoundException("User with email $email not found")
 
     fun findUserById(id: UUID): User = userRepository.findByIdOrNull(id)
         ?: throw UserNotFoundException("User with id $id not found")
 
-    fun updateUserById(id: UUID, updatedData: User): User? {
+    fun updateUser(id: UUID, updatedData: User): User? {
         val existingUser = userRepository.findByIdOrNull(id) ?: return null
         val updatedUser = existingUser.copy(
             username = updatedData.username,

@@ -2,6 +2,7 @@ package com.example.marketplace_api
 
 import com.example.marketplace_api.models.User
 import com.example.marketplace_api.repositories.UserRepository
+import com.example.marketplace_api.service.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.BeforeEach
@@ -23,13 +24,14 @@ class UserControllerTest {
 
     @Autowired lateinit var mockMvc: MockMvc
     @Autowired lateinit var userRepository: UserRepository
+    @Autowired lateinit var userService: UserService
     @Autowired private lateinit var objectMapper: ObjectMapper
     private lateinit var savedUser: User
 
     @BeforeEach
     fun setup() {
         userRepository.deleteAll()
-        savedUser = userRepository.save(
+        savedUser = userService.saveUser(
             User(
                 username = "testuser",
                 email = "test@example.com",
@@ -75,6 +77,18 @@ class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/users/$userId"))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(userId))
+    }
+
+    @Test
+    fun `should test update user`() {
+        val updatedUser = savedUser.copy(email = "updated@example.com")
+        val updatedUserJson = objectMapper.writeValueAsString(updatedUser)
+        val userId = savedUser.id.toString()
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/$userId")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(updatedUserJson))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(updatedUser.email))
     }
 
     @Test

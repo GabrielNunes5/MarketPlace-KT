@@ -5,7 +5,7 @@ import java.util.*
 
 @Entity
 @Table(name = "order_items")
-class OrderItem(
+data class OrderItem(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID? = null,
