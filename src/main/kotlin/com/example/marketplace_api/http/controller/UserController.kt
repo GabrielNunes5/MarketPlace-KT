@@ -14,7 +14,7 @@ class UserController(private val userService: UserService) {
     fun createUser(request: ServerRequest): ServerResponse {
         val user = request.body(User::class.java)
         val savedUser = userService.saveUser(user)
-        return ServerResponse.created(URI.create("/user/${savedUser.id}")).build()
+        return ServerResponse.created(URI.create("/users/${savedUser.id}")).body(savedUser)
     }
 
     fun getUsers(request: ServerRequest): ServerResponse {
@@ -38,13 +38,11 @@ class UserController(private val userService: UserService) {
         val id = UUID.fromString(request.pathVariable("id"))
         val updatedData = request.body(User::class.java)
         val updatedUser = userService.updateUser(id, updatedData)
-            ?: return ServerResponse.notFound().build()
         return ServerResponse.ok().body(updatedUser)
     }
 
     fun deleteUserById(request: ServerRequest): ServerResponse {
         val id = UUID.fromString(request.pathVariable("id"))
-            ?: return ServerResponse.notFound().build()
         userService.deleteUser(id)
         return ServerResponse.noContent().build()
     }

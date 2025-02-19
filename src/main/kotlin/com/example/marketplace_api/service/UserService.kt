@@ -4,39 +4,54 @@ import com.example.marketplace_api.exception.UserNotFoundException
 import com.example.marketplace_api.models.User
 import com.example.marketplace_api.repositories.UserRepository
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class UserService(private val userRepository: UserRepository ) {
+class UserService(
+    private val userRepository: UserRepository,
+    private val passwordEncoder: BCryptPasswordEncoder
+) {
 
     fun saveUser(user: User): User {
-        return userRepository.save(user)
+        val userToSave = user.copy(password = passwordEncoder.encode(user.password))
+        return userRepository.save(userToSave)
     }
 
     fun findAll(): List<User> {
-        return userRepository.findAll()
+        return userRepository.findAll().ifEmpty {
+            throw UserNotFoundException("No users found in the database")
+        }
     }
 
-    fun findUserByEmail(email: String): User =
-        userRepository.findByEmail(email)
+    fun findUserByEmail(email: String): User {
+        return userRepository.findByEmail(email)
             ?: throw UserNotFoundException("User with email $email not found")
+    }
 
-    fun findUserById(id: UUID): User = userRepository.findByIdOrNull(id)
-        ?: throw UserNotFoundException("User with id $id not found")
+    fun findUserById(id: UUID): User {
+        return userRepository.findByIdOrNull(id)
+            ?: throw UserNotFoundException("User with id $id not found")
+    }
 
-    fun updateUser(id: UUID, updatedData: User): User? {
-        val existingUser = userRepository.findByIdOrNull(id) ?: return null
+    fun updateUser(id: UUID, updatedData: User): User {
+        val existingUser = userRepository.findByIdOrNull(id)
+            ?: throw UserNotFoundException("User with id $id not found")
+
         val updatedUser = existingUser.copy(
             username = updatedData.username,
             email = updatedData.email,
             fullName = updatedData.fullName,
-            password = updatedData.password
+            password = passwordEncoder.encode(updatedData.password)
         )
+
         return userRepository.save(updatedUser)
     }
 
     fun deleteUser(userId: UUID) {
-        userRepository.deleteById(userId)
+        val user = userRepository.findByIdOrNull(userId)
+            ?: throw UserNotFoundException("User with id $userId not found")
+        userRepository.delete(user)
     }
 }

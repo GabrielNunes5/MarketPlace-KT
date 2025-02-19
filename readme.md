@@ -62,7 +62,7 @@ O objetivo do projeto é gerenciar os elementos essenciais de um marketplace, co
 
 1. **Clone o Repositório:**
    ```bash
-   git clone <url-do-repositório>
+   git clone <https://github.com/GabrielNunes5/MarketPlace-KT.git>
    cd marketplace-api
     ```
 2. **Configure as Propriedades do Banco:** 
